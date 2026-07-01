@@ -1,31 +1,15 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MapPin, User, Heart, Share2, MessageCircle, ShieldCheck } from 'lucide-react';
+import { DUMMY_PRODUCTS } from '../data/mockData';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [activeImage, setActiveImage] = useState(0);
 
-  // Mock data for Sprint 1
-  const product = {
-    id: id || '1',
-    title: 'Vintage Leather Jacket',
-    price: 45.00,
-    category: 'Clothes',
-    location: 'Downtown, Springfield',
-    description: 'Beautiful vintage leather jacket from the 80s. Genuine leather, well-maintained. Has a small scuff on the right sleeve but otherwise in perfect condition. Great for autumn weather.',
-    seller: {
-      name: 'Alex Johnson',
-      rating: 4.8,
-      joined: 'Member since 2023'
-    },
-    images: [
-      'https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1520975954732-57dd22299614?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1489987707023-afc824781682?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-    ]
-  };
+  // Fetch product dynamically based on ID, fallback to first item if not found
+  const product = DUMMY_PRODUCTS.find(p => p.id.toString() === id) || DUMMY_PRODUCTS[0];
 
   return (
     <div className="container animate-fade-in product-details-container">
@@ -57,10 +41,6 @@ const ProductDetails = () => {
           
           <h1 className="product-page-title">{product.title}</h1>
           
-          <div className="product-price-large">
-            ${product.price.toFixed(2)}
-          </div>
-          
           <div className="product-meta flex items-center gap-md">
             <div className="meta-item flex items-center">
               <MapPin size={16} />
@@ -70,7 +50,7 @@ const ProductDetails = () => {
 
           <div className="action-buttons flex gap-sm">
             <button className="btn btn-primary flex-1 flex justify-center items-center gap-sm">
-              <MessageCircle size={18} /> Chat with Seller
+              <MessageCircle size={18} /> Chat with Donor
             </button>
             <button className="btn btn-secondary icon-btn" title="Add to Wishlist">
               <Heart size={20} />
@@ -86,7 +66,7 @@ const ProductDetails = () => {
           </div>
 
           <div className="seller-info card glass mt-md">
-            <h3>About the Seller</h3>
+            <h3>About the Donor</h3>
             <div className="seller-profile flex items-center gap-md mt-sm">
               <div className="seller-avatar">
                 <User size={24} />
