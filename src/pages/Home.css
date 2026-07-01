@@ -37,12 +37,25 @@
 }
 
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: var(--spacing-md);
+  display: flex;
+  overflow-x: auto;
+  gap: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  /* Hide scrollbar for a cleaner premium look */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.categories-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .category-card {
+  flex: 0 0 auto;
+  width: 130px;
+  scroll-snap-align: start;
   padding: var(--spacing-md);
   text-align: center;
   cursor: pointer;
@@ -71,12 +84,25 @@
 
 /* Products Section */
 .products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  display: flex;
+  overflow-x: auto;
   gap: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  /* Hide scrollbar for a cleaner premium look */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.products-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .product-card {
+  flex: 0 0 auto;
+  width: 280px;
+  scroll-snap-align: start;
   padding: 0;
   overflow: hidden;
   display: flex;

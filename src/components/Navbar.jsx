@@ -35,7 +35,7 @@ const Navbar = () => {
         <div className="navbar-actions">
           <button className="btn btn-secondary action-btn" onClick={() => navigate('/add-product')}>
             <PlusCircle size={18} style={{marginRight: '8px'}} />
-            Sell Item
+            Donate Item
           </button>
           <Link to="/login" className="nav-link icon-link">
             <LogIn size={20} />
