@@ -72,13 +72,13 @@ const ProductDetails = () => {
                 <User size={24} />
               </div>
               <div className="seller-details flex-1">
-                <div className="seller-name">{product.seller.name}</div>
-                <div className="seller-rating">⭐ {product.seller.rating} / 5.0</div>
+                <div className="seller-name">{product.donor.name}</div>
+                <div className="seller-rating">⭐ {product.donor.rating} / 5.0</div>
               </div>
             </div>
             <div className="safety-tip flex items-center gap-sm mt-md">
               <ShieldCheck size={18} className="text-success" />
-              <span className="text-sm">Never pay in advance. Inspect the item in person.</span>
+              <span className="text-sm">Always meet in a public place. Inspect the item in person.</span>
             </div>
           </div>
 

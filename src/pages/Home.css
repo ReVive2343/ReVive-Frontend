@@ -4,30 +4,89 @@
   gap: var(--spacing-2xl);
 }
 
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
-  padding: 4rem 0;
-  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
-  margin-top: -2rem; /* offset the layout padding if needed */
+/* Quick Actions Section */
+.quick-actions-section {
+  margin-top: calc(-1 * var(--spacing-lg));
+  position: relative;
+  z-index: 10;
 }
 
-.hero-content {
-  max-width: 600px;
+.action-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
 }
 
-.hero-content h1 {
-  font-size: 3.5rem;
-  line-height: 1.1;
-  margin-bottom: var(--spacing-md);
-  background: -webkit-linear-gradient(45deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  text-decoration: none;
+  border-radius: var(--radius-xl);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
 }
 
-.hero-content p {
-  font-size: 1.25rem;
-  margin-bottom: var(--spacing-lg);
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.action-card:hover::before {
+  opacity: 1;
+}
+
+.donate-card {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: white;
+  border: none;
+}
+
+.browse-card {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-hover) 100%);
+  color: white;
+  border: none;
+}
+
+.action-icon-wrapper {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon {
+  color: white;
+}
+
+.action-text h2 {
+  color: white;
+  margin-bottom: var(--spacing-xs);
+  font-size: 1.5rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.action-text p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-size: 1rem;
 }
 
 /* Categories Section */
@@ -162,10 +221,11 @@
   flex: 1;
 }
 
-.product-price {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--primary);
+.product-condition {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
 }
 
 .btn-sm {
@@ -176,4 +236,197 @@
 .view-all-link {
   font-weight: 500;
   font-size: 0.9rem;
+}
+
+/* Volunteer Section */
+.volunteer-section {
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.volunteer-card {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-2xl);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border: 1px solid var(--border);
+}
+
+@media (min-width: 768px) {
+  .volunteer-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.volunteer-content {
+  flex: 1;
+}
+
+.volunteer-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+  background: -webkit-linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.volunteer-content p {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.volunteer-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.volunteer-image {
+  max-width: 100%;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.testimonial-card {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  position: relative;
+  border-radius: var(--radius-xl);
+}
+
+.quote-icon {
+  color: var(--primary);
+  opacity: 0.15;
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.testimonial-text {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.6;
+  z-index: 1;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.author-info h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.author-info span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* CTA Section */
+.cta-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.cta-card {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  color: white;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  border: none;
+}
+
+.cta-card h2 {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  max-width: 800px;
+  line-height: 1.2;
+}
+
+.cta-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.cta-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cta-buttons .btn-primary {
+  background-color: white;
+  color: var(--primary);
+}
+
+.cta-buttons .btn-primary:hover {
+  background-color: var(--surface);
+  color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.cta-buttons .btn-secondary {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+.cta-buttons .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+@media (max-width: 768px) {
+  .cta-card h2 {
+    font-size: 2rem;
+  }
 }
