@@ -7,9 +7,46 @@ import './ProductDetails.css';
 const ProductDetails = () => {
   const { id } = useParams();
   const [activeImage, setActiveImage] = useState(0);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch product dynamically based on ID, fallback to first item if not found
-  const product = DUMMY_PRODUCTS.find(p => p.id.toString() === id) || DUMMY_PRODUCTS[0];
+  React.useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`https://reviveapi.defigo.in/products/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProduct(data);
+        } else {
+          // Fallback to mock data if not found
+          setProduct(DUMMY_PRODUCTS.find(p => p.id.toString() === id) || DUMMY_PRODUCTS[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching product, falling back to mock data:", error);
+        setProduct(DUMMY_PRODUCTS.find(p => p.id.toString() === id) || DUMMY_PRODUCTS[0]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="container animate-fade-in product-details-container flex justify-center items-center" style={{ minHeight: '50vh' }}>
+        <div className="loading-spinner">Loading product details...</div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return <div className="container mt-xl text-center">Product not found.</div>;
+  }
+
+  // Ensure images array exists
+  const images = product.images && product.images.length > 0 
+    ? product.images 
+    : [product.image || 'https://via.placeholder.com/600'];
 
   return (
     <div className="container animate-fade-in product-details-container">
@@ -18,19 +55,21 @@ const ProductDetails = () => {
         {/* Left Column - Images */}
         <div className="product-images-section">
           <div className="main-image-container card">
-            <img src={product.images[activeImage]} alt={product.title} className="main-image" />
+            <img src={images[activeImage]} alt={product.title} className="main-image" />
           </div>
-          <div className="thumbnail-list">
-            {product.images.map((img, index) => (
-              <button 
-                key={index} 
-                className={`thumbnail-btn ${activeImage === index ? 'active' : ''}`}
-                onClick={() => setActiveImage(index)}
-              >
-                <img src={img} alt={`Thumbnail ${index + 1}`} />
-              </button>
-            ))}
-          </div>
+          {images.length > 1 && (
+            <div className="thumbnail-list">
+              {images.map((img, index) => (
+                <button 
+                  key={index} 
+                  className={`thumbnail-btn ${activeImage === index ? 'active' : ''}`}
+                  onClick={() => setActiveImage(index)}
+                >
+                  <img src={img} alt={`Thumbnail ${index + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Right Column - Info */}
@@ -72,8 +111,8 @@ const ProductDetails = () => {
                 <User size={24} />
               </div>
               <div className="seller-details flex-1">
-                <div className="seller-name">{product.donor.name}</div>
-                <div className="seller-rating">⭐ {product.donor.rating} / 5.0</div>
+                <div className="seller-name">{product.donor?.name || 'Anonymous Donor'}</div>
+                <div className="seller-rating">⭐ {product.donor?.rating || 'New'} / 5.0</div>
               </div>
             </div>
             <div className="safety-tip flex items-center gap-sm mt-md">

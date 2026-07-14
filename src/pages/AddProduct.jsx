@@ -4,6 +4,18 @@ import './AddProduct.css';
 
 const AddProduct = () => {
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    price: '',
+    category: '',
+    location: '',
+    description: ''
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -18,9 +30,37 @@ const AddProduct = () => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting product with", images.length, "images");
+    setLoading(true);
+
+    try {
+      // In a real scenario, you'd use FormData for file uploads
+      // For now, sending a JSON payload matching the other endpoints
+      const response = await fetch('https://reviveapi.defigo.in/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}` // assuming token is needed
+        },
+        body: JSON.stringify({
+          ...formData,
+          images: images.map(img => img.url) // send URLs or handle file uploads in backend
+        })
+      });
+
+      if (response.ok) {
+        alert('Product added successfully!');
+        // Reset form or navigate away
+      } else {
+        alert('Failed to add product. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +80,7 @@ const AddProduct = () => {
               
               <div className="input-group">
                 <label>Title</label>
-                <input type="text" required placeholder="e.g. Vintage Leather Jacket" className="input-field" />
+                <input type="text" name="title" value={formData.title} onChange={handleChange} required placeholder="e.g. Vintage Leather Jacket" className="input-field" />
               </div>
 
               <div className="form-row">
@@ -48,7 +88,7 @@ const AddProduct = () => {
                   <label>Price ($)</label>
                   <div className="input-with-icon">
                     <DollarSign size={18} className="input-icon" />
-                    <input type="number" required min="0" step="0.01" placeholder="0.00" className="input-field" />
+                    <input type="number" name="price" value={formData.price} onChange={handleChange} required min="0" step="0.01" placeholder="0.00" className="input-field" />
                   </div>
                   <span className="helper-text">Enter 0 to list as a Donation.</span>
                 </div>
@@ -57,7 +97,7 @@ const AddProduct = () => {
                   <label>Category</label>
                   <div className="input-with-icon">
                     <Tag size={18} className="input-icon" />
-                    <select required className="input-field select-field">
+                    <select name="category" value={formData.category} onChange={handleChange} required className="input-field select-field">
                       <option value="">Select category...</option>
                       <option value="books">Books</option>
                       <option value="electronics">Electronics</option>
@@ -75,7 +115,7 @@ const AddProduct = () => {
                 <label>Location</label>
                 <div className="input-with-icon">
                   <MapPin size={18} className="input-icon" />
-                  <input type="text" required placeholder="Neighborhood, City, or Zip" className="input-field" />
+                  <input type="text" name="location" value={formData.location} onChange={handleChange} required placeholder="Neighborhood, City, or Zip" className="input-field" />
                 </div>
               </div>
 
@@ -83,7 +123,7 @@ const AddProduct = () => {
                 <label>Description</label>
                 <div className="textarea-with-icon">
                   <AlignLeft size={18} className="input-icon textarea-icon" />
-                  <textarea required rows="4" placeholder="Describe the condition, features, and reason for selling..." className="input-field"></textarea>
+                  <textarea name="description" value={formData.description} onChange={handleChange} required rows="4" placeholder="Describe the condition, features, and reason for selling..." className="input-field"></textarea>
                 </div>
               </div>
             </div>
@@ -132,7 +172,9 @@ const AddProduct = () => {
 
             <div className="submit-section">
               <button type="button" className="btn btn-secondary flex-1">Cancel</button>
-              <button type="submit" className="btn btn-primary flex-2">Publish Listing</button>
+              <button type="submit" className="btn btn-primary flex-2" disabled={loading}>
+                {loading ? 'Publishing...' : 'Publish Listing'}
+              </button>
             </div>
           </div>
 

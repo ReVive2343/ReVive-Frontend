@@ -8,10 +8,37 @@ import './Home.css';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://reviveapi.defigo.in/products');
+        if (response.ok) {
+          const data = await response.json();
+          // Fallback to mock data if the API returns an empty array or non-array
+          if (Array.isArray(data) && data.length > 0) {
+            setProducts(data);
+          } else {
+            setProducts(DUMMY_PRODUCTS);
+          }
+        } else {
+          setProducts(DUMMY_PRODUCTS);
+        }
+      } catch (error) {
+        console.error("Error fetching products, falling back to mock data:", error);
+        setProducts(DUMMY_PRODUCTS);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const displayedProducts = selectedCategory 
-    ? DUMMY_PRODUCTS.filter(p => p.category === selectedCategory)
-    : DUMMY_PRODUCTS;
+    ? products.filter(p => p.category === selectedCategory)
+    : products;
 
   return (
     <div className="home-page animate-fade-in">
@@ -76,7 +103,9 @@ const Home = () => {
         </div>
         
         <div className="products-grid">
-          {displayedProducts.length > 0 ? (
+          {loading ? (
+            <div className="loading-spinner text-center" style={{ gridColumn: '1 / -1', padding: '2rem' }}>Loading products...</div>
+          ) : displayedProducts.length > 0 ? (
             displayedProducts.map(product => (
               <div key={product.id} className="product-card card">
                 <div className="product-image-container">
@@ -95,7 +124,7 @@ const Home = () => {
             ))
           ) : (
             <div className="no-products-msg" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-              No items found in {selectedCategory} yet.
+              {selectedCategory ? `No items found in ${selectedCategory} yet.` : 'No items found yet.'}
             </div>
           )}
         </div>
