@@ -34,14 +34,20 @@ const Auth = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, password: formData.password })
         });
-        const data = await response.json();
+        const jsonRes = await response.json();
         
-        if (response.ok) {
-          localStorage.setItem('token', data.token || data.access_token);
+        if (response.ok && jsonRes.success !== false) {
+          const resData = jsonRes.data || jsonRes;
+          localStorage.setItem('token', resData.token || resData.access_token);
+          if (resData.user) {
+            localStorage.setItem('user', JSON.stringify(resData.user));
+          } else if (resData.name || resData.email) {
+            localStorage.setItem('user', JSON.stringify({ name: resData.name, email: resData.email }));
+          }
           setSuccess('Login successful!');
           setTimeout(() => navigate('/'), 1000);
         } else {
-          setError(data.message || 'Login failed. Please check your credentials.');
+          setError(jsonRes.message || 'Login failed. Please check your credentials.');
         }
       } else if (view === 'register') {
         const response = await fetch('https://reviveapi.defigo.in/auth/register', {
